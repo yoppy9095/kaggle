@@ -1,26 +1,18 @@
 import numpy as np
-
-#unko
-
-#aaa
-
-
 import pandas as pd
 
-#kkkkkk
-
-
-import matplotlib.pyplot as plt
 
 def titanic_train(dir):
     # train_path = "D:/kaggle/titanic/train.csv"
-    train = pd.read_csv(dir, index_col=0)
+    train = pd.read_csv(dir, index_col=0).replace("male",0).replace("female",1)
 
-
-    drop_columns = ["Age","Cabin","Fare","Embarked"]
+    drop_columns = ["Name","Age","Cabin","Fare","Embarked","Ticket"]
     train_modify = train.drop(drop_columns, axis=1)
+    
+    y_train = train_modify["Survived"]
+    x_train = train_modify.drop(labels = ["Survived"], axis = 1)
 
-    return train_modify
+    return x_train, y_train
 
 
 def titanic_test(dir):
