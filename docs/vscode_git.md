@@ -1,7 +1,7 @@
 # Visual Studio CodeでのGithub基本操作まとめ
 gitはあらかじめ設定できているものとする
-gitの初期設定は[ここを参照](https://prog-8.com/docs/git-env-win"ここを参照")
-vscodeでのgitの基本操作まとめのQiitaは[こちら](https://qiita.com/y-tsutsu/items/2ba96b16b220fb5913be"こちら")
+gitの初期設定は[ここを参照](https://prog-8.com/docs/git-env-win)
+vscodeでのgitの基本操作まとめのQiitaは[こちら](https://qiita.com/y-tsutsu/items/2ba96b16b220fb5913be)
 ## 1.リポジトリのクローン
 この操作は環境構築を行う際に、最初に連携用のディレクトリを作成するために用いる
 
