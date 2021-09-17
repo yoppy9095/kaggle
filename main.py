@@ -4,7 +4,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.model_selection import GridSearchCV
 from sklearn.preprocessing import LabelEncoder
 from sklearn.ensemble import RandomForestClassifier
-
+import pandas as pd
 
 def main():
     #option
@@ -27,14 +27,20 @@ def main():
     }
 
     # モデル構築
-    model = GridSearchCV(RandomForestClassifier(), params, cv = 3)
+    model = GridSearchCV(RandomForestClassifier(), params, cv = 3, verbose=2)
     model = model.fit(x_train, y_train)
+    
+    # スコアの一覧を取得
+    model_result = pd.DataFrame.from_dict(model.cv_results_)
+    model_result.to_csv('result.csv')
+    
     model = model.best_estimator_
 
     # 検証用セットを用いて評価
     print(model.score(x_val, y_val))
 
 
+    #0.7757847533632287
 
 
 
