@@ -1,6 +1,17 @@
 import numpy as np
 import pandas as pd
 
+import tensorflow as tf
+from tensorflow.keras.models import Sequential, Model
+from tensorflow.keras.layers import Conv2D
+from tensorflow.keras.layers import MaxPool2D
+from tensorflow.keras import optimizers
+from tensorflow.keras.layers import Dense, Activation, Dropout, Flatten, Input, Lambda, Conv2D, MaxPooling2D, BatchNormalization
+from tensorflow.keras.utils import plot_model, to_categorical
+from tensorflow.keras.datasets import cifar10
+import matplotlib.pyplot as plt
+from matplotlib import cm
+
 train = pd.read_csv("titanic/train.csv", index_col=0).replace("male",0).replace("female",1).replace("S",0).replace("C",1).replace("Q",2)
 test = pd.read_csv("titanic/test.csv", index_col=0).replace("male",0).replace("female",1).replace("S",0).replace("C",1).replace("Q",2)
 #csvデータの読み込み
@@ -26,8 +37,14 @@ train["Embarked"] = train["Embarked"].fillna("S")
 #欠損データの補完
 
 #print(loss_table(train))
-#欠損データ保管の確認
+#欠損データ補完の確認
+
+#print(train.head(10))
+
+test["Age"] = test["Age"].fillna(test["Age"].median())
+test["Fare"] = test["Fare"].fillna(test["Fare"].median())
+#テストデータの補完
+#print(loss_table(test))
 
 
 
-print(train.head(10))
