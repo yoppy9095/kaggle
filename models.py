@@ -2,7 +2,7 @@ from sklearn.model_selection import GridSearchCV
 from sklearn.preprocessing import LabelEncoder
 from sklearn.ensemble import RandomForestClassifier
 from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Dense
+from tensorflow.keras.layers import Dense,Dropout
 
 def random_forest_model(params):
     # # 学習に関するパラメータ設定
@@ -24,9 +24,10 @@ def random_forest_model(params):
 
 def nn_model():
     model = Sequential()
-    model.add(Dense(128, activation='relu', input_dim=4))
-    
-    model.add(Dense(128, activation='relu'))
+    model.add(Dense(256, activation='relu', input_dim=6))
+    model.add(Dropout(0.5))
+    model.add(Dense(256, activation='relu'))
+    model.add(Dropout(0.5))
     model.add(Dense(1, activation='sigmoid'))
 
     return model

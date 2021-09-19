@@ -4,11 +4,12 @@ import pandas as pd
 
 def titanic_train(dir):
     # train_path = "D:/kaggle/titanic/train.csv"
-    train = pd.read_csv(dir, index_col=0).replace("male",0).replace("female",1)
+    train = pd.read_csv(dir, index_col=0).replace("male",0).replace("female",1).replace("S",1).replace("C",2).replace("Q",3)
 
-    drop_columns = ["Name","Age","Cabin","Fare","Embarked","Ticket"]
+    drop_columns = ["Name","Cabin","Fare","Ticket"]
     train_modify = train.drop(drop_columns, axis=1)
-    
+    train_modify = train_modify.dropna(subset=['Age'])
+    train_modify = train_modify.dropna(subset=['Embarked'])
     y_train = train_modify["Survived"]
     x_train = train_modify.drop(labels = ["Survived"], axis = 1)
 

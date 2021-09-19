@@ -20,11 +20,11 @@ def opt_args():
     )
     parser.add_argument(
         '--batch_size',
-        default=128
+        default=32
     )
     parser.add_argument(
         '--epochs',
-        default=50
+        default=800
     )
 
 
