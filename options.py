@@ -10,8 +10,22 @@ def opt_args():
         '--test_path',
         default='D:/kaggle/titanic/test.csv'
     )
-
-
+    parser.add_argument(
+        '--model_name',
+        default='random_forest'
+    )
+    parser.add_argument(
+        '--lr',
+        default=1e-4
+    )
+    parser.add_argument(
+        '--batch_size',
+        default=128
+    )
+    parser.add_argument(
+        '--epochs',
+        default=50
+    )
 
 
 
