@@ -105,4 +105,4 @@ for item in answer["Survived"]:
     i+=1
 
 print(count/len(answer))
-#print(predictions[0])
+#テストデータ出力
