@@ -29,7 +29,7 @@ def loss_table(df):
 #欠損データの確認
 
 train["Age"] = train["Age"].fillna(train["Age"].median())
-train["Embarked"] = train["Embarked"].fillna("S")
+train["Embarked"] = train["Embarked"].fillna(0)
 #欠損データの補完
 
 #print(loss_table(train))
@@ -51,17 +51,21 @@ x_train = train_modify.drop(labels = ["Survived"], axis = 1)
 
 model = Sequential()
 
-model.add(Dense(4, input_dim = 4 ))
+model.add(Dense(256, input_dim = 6))
 model.add(Activation('relu'))
 
-model.add(Dense(3))
+model.add(Dense(256))
 model.add(Activation('relu'))
 
-model.add(Dense(2))
+model.add(Dense(256))
 model.add(Activation('relu'))
+
+model.add(Dense(256))
+model.add(Activation('relu'))
+
 
 model.add(Dense(1))
-model.add(Activation('softmax'))
+model.add(Activation('sigmoid'))
 
 adam = optimizers.Adam(lr=1e-4)
 model.compile(optimizer=adam, 
