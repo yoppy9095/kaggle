@@ -4,8 +4,8 @@ from sklearn.model_selection import train_test_split
 from sklearn.model_selection import GridSearchCV
 from sklearn.preprocessing import LabelEncoder
 from sklearn.ensemble import RandomForestClassifier
-from tensorflow.keras import optimizers
-
+from tensorflow.keras import optimizers, models
+ 
 import pandas as pd
 import matplotlib.pyplot as plt
 from models import random_forest_model, nn_model
@@ -33,39 +33,48 @@ def main():
         "verbose" : [False],
     }
 
+    if opts.phase == 'train':
+        if opts.model_name == 'random_forest':
+            
+            model = random_forest_model(params)
+            model = model.fit(x_train, y_train)
 
-    if opts.model_name == 'random_forest':
+            # スコアの一覧を取得
+            model_result = pd.DataFrame.from_dict(model.cv_results_)
+            model_result.to_csv('result.csv')
         
-        model = random_forest_model(params)
-        model = model.fit(x_train, y_train)
+            history = model.best_estimator_
 
-        # スコアの一覧を取得
-        model_result = pd.DataFrame.from_dict(model.cv_results_)
-        model_result.to_csv('result.csv')
+            # 検証用セットを用いて評価
+            #print(model.score(x_val, y_val))
+        elif opts.model_name == 'nn':
+            model = nn_model()
+            optimizer = optimizers.Adam(lr=opts.lr)
+            model.compile(optimizer=optimizer, loss='binary_crossentropy', metrics=["accuracy"])
+            history = model.fit(x_train, y_train, batch_size=opts.batch_size, epochs=opts.epochs, verbose=1, validation_split=0.2)
+
+            model.save("nn_model")
+        metrics = ['loss', 'accuracy']
+        for i in range(len(metrics)):
+            metric = metrics[i]
+            plt.subplot(1, 2, i+1)
+            plt.title(metric)
+
+            plt_train = history.history[metric]
+            plt_test = history.history['val_'+metric]
+
+            plt.plot(plt_train, label = 'train')
+            plt.plot(plt_test, label = 'validation')
+            plt.legend()
+        plt.show()
     
-        history = model.best_estimator_
+    elif opts.phase == 'test':
+        x_test, y_test = titanic_test(opts.test_path, opts.gender_csv_path)
+        model = models.load_model("nn_model")
+        test_loss, test_acc = model.evaluate(x_test, y_test, verbose=0)
 
-        # 検証用セットを用いて評価
-        print(model.score(x_val, y_val))
-    elif opts.model_name == 'nn':
-        model = nn_model()
-        optimizer = optimizers.Adam(lr=opts.lr)
-        model.compile(optimizer=optimizer, loss='binary_crossentropy', metrics=["accuracy"])
-        history = model.fit(x_train, y_train, batch_size=opts.batch_size, epochs=opts.epochs, verbose=1, validation_split=0.2)
-
-    metrics = ['loss', 'accuracy']
-    for i in range(len(metrics)):
-        metric = metrics[i]
-        plt.subplot(1, 2, i+1)
-        plt.title(metric)
-
-        plt_train = history.history[metric]
-        plt_test = history.history['val_'+metric]
-
-        plt.plot(plt_train, label = 'train')
-        plt.plot(plt_test, label = 'validation')
-        plt.legend()
-    plt.show()
+        print(test_loss)
+        print(test_acc)
 
 
 if __name__ == '__main__':

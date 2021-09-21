@@ -11,8 +11,12 @@ def opt_args():
         default='D:/kaggle/titanic/test.csv'
     )
     parser.add_argument(
+        '--gender_csv_path',
+        default='D:/kaggle/titanic/gender_submission.csv'
+    )
+    parser.add_argument(
         '--model_name',
-        default='random_forest'
+        default='nn'
     )
     parser.add_argument(
         '--lr',
@@ -24,10 +28,12 @@ def opt_args():
     )
     parser.add_argument(
         '--epochs',
-        default=800
+        default=300
     )
-
-
+    parser.add_argument(
+        '--phase',
+        default='train'
+    )
 
     args = parser.parse_args()
     

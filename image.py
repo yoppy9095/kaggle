@@ -16,15 +16,15 @@ def titanic_train(dir):
     return x_train, y_train
 
 
-def titanic_test(dir):
+def titanic_test(t_dir, g_dir):
     # test_path = "D:/kaggle/titanic/test.csv"
-    test = pd.read_csv(dir, index_col=0)
+    x_test = pd.read_csv(t_dir, index_col=0).replace("male",0).replace("female",1).replace("S",1).replace("C",2).replace("Q",3)
+    y_test = pd.read_csv(g_dir, index_col=0)
 
+    drop_columns = ["Name","Cabin","Fare","Ticket"]
+    x_test = x_test.drop(drop_columns, axis=1)
 
-    drop_columns = ["Age","Cabin","Fare","Embarked"]
-    test_modify = test.drop(drop_columns, axis=1)
-
-    return test_modify
+    return x_test, y_test
 
 
 #デバッグ用
