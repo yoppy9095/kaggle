@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 import tensorflow as tf
-from tensorflow.keras.models import Sequential, Model
+from tensorflow.keras.models import Sequential, Model, load_model
 from tensorflow.keras import optimizers
 from tensorflow.keras.layers import Dense, Activation, Dropout, Flatten, Input, Lambda, MaxPooling2D, BatchNormalization
 from tensorflow.keras.utils import plot_model, to_categorical
@@ -42,7 +42,7 @@ train["Embarked"] = train["Embarked"].fillna(0)
 
 #テストデータの補完
 test["Age"] = test["Age"].fillna(test["Age"].median())
-test["Fare"] = test["Fare"].fillna(test["Fare"].median())
+#test["Fare"] = test["Fare"].fillna(test["Fare"].median())
 
 #print(loss_table(test))
 
@@ -51,7 +51,6 @@ drop_columns = ["Name","Cabin","Fare","Ticket"]
 train_modify = train.drop(drop_columns, axis=1)
 y_train = train_modify["Survived"]
 x_train = train_modify.drop(labels = ["Survived"], axis = 1)
-
 test_modify = test.drop(drop_columns, axis=1)
 
 
@@ -70,7 +69,6 @@ test_modify = test.drop(drop_columns, axis=1)
 # model.add(Dense(256))
 # model.add(Activation('relu'))
 
-
 # model.add(Dense(1))
 # model.add(Activation('sigmoid'))
 
@@ -80,7 +78,7 @@ test_modify = test.drop(drop_columns, axis=1)
 #               metrics=['accuracy'])
 
 #実行
-history = model.fit(x_train, y_train, batch_size=128, epochs=500, verbose=1, validation_split=0.1)
+# history = model.fit(x_train, y_train, batch_size=128, epochs=500, verbose=1, validation_split=0.1)
 
 # model.save("model.h5")
 
@@ -93,19 +91,9 @@ history = model.fit(x_train, y_train, batch_size=128, epochs=500, verbose=1, val
 # plt.legend(['Train', 'Validation'], loc='upper left')
 # plt.show()
 
-new_model = tf.keras.models.load_model("model.h5")
+new_model = load_model("model.h5")
 new_model.summary()
+test_loss, test_acc = new_model.evaluate(test_modify, answer, verbose=0)
 
-predictions = new_model.predict(test_modify)
-
-
-
-count = 0 
-i = 0
-for item in answer["Survived"]:
-    predict_data = np.argmax(predictions[i])
-    if predict_data == item:
-        count += 1
-    i+=1
-#テストデータ出力
-print(count/len(answer))
+print(test_loss)
+print(test_acc)
